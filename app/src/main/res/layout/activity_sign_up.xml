@@ -6,4 +6,52 @@
     android:layout_height="match_parent"
     tools:context=".SignUpActivity">
 
+    <EditText
+        android:id="@+id/username_edittext_signup"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="108dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/username_textview"/>
+
+    <EditText
+        android:id="@+id/password_edittext_signup"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username_edittext_signup"
+        android:hint="@string/password_textview"
+        android:inputType="textPassword"/>
+
+    <EditText
+        android:id="@+id/phone_edittext_signup"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/confirm_password_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_edittext_signup" />
+
+    <EditText
+        android:id="@+id/c_password_edittext_signup"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/phone_number_textview"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phone_edittext_signup"
+        android:inputType="textPassword"/>
+
+    <Button
+        android:id="@+id/create_account_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/c_password_edittext_signup" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

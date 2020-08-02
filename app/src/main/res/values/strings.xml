@@ -4,4 +4,7 @@
     <string name="password_textview">password</string>
     <string name="login">login</string>
     <string name="signup">sign up</string>
+    <string name="confirm_password_textview">confirm password</string>
+    <string name="phone_number_textview">phone number</string>
+    <string name="create_account">create account</string>
 </resources>
