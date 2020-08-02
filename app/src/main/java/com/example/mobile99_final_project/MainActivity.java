@@ -7,11 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import com.example.mobile99_final_project.Enums.HandlerMassages;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,9 +72,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        loginButton = findViewById(R.id.login_button);
+        signUpButton = findViewById(R.id.signup_button);
+
+        usernameText = findViewById(R.id.username_edittext);
+        passwordText = findViewById(R.id.password_edittext);
+
+        loginCredentials = new String[2];
+
+        executorService = Executors.newSingleThreadExecutor();
+        actionHandler = new ActionHandler(this);
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                loginCredentials[0] = usernameText.getText().toString();
+                loginCredentials[1] = passwordText.getText().toString();
+                Message msg = new Message();
+                msg.what = HandlerMassages.LOGIN_MESSAGE;
+                actionHandler.sendMessage(msg);
+            }
+        });
+        
+        
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotToSignUpActivity();
+            }
+        });
     }
 
     private void goToFirstPageActivity(String token){
+
+    }
+
+    private void gotToSignUpActivity(){
 
     }
 
