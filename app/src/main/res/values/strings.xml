@@ -7,4 +7,7 @@
     <string name="confirm_password_textview">confirm password</string>
     <string name="phone_number_textview">phone number</string>
     <string name="create_account">create account</string>
+    <string name="ad_title">title</string>
+    <string name="ad_owner">owner</string>
+    <string name="ad_cat">category</string>
 </resources>
