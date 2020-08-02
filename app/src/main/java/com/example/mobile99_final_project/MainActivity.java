@@ -10,12 +10,25 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import com.example.mobile99_final_project.Enums.HandlerMassages;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -106,15 +119,78 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToFirstPageActivity(String token){
-
+        Intent intent = new Intent(getBaseContext(), FirstPageActivity.class);
+        intent.putExtra("token", token);
+        intent.putExtra("username", loginCredentials[0]);
+        startActivity(intent);
     }
 
     private void gotToSignUpActivity(){
-
+        Intent intent = new Intent(getBaseContext(), SignUpActivity.class);
+        startActivity(intent);
     }
 
     private void getLoginToken(){
+        String url = "http://142.93.151.73:8000/api-auth/";
 
+        final StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response);
+                    final String token = jsonObject.getString("token");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Message msg = new Message();
+                            msg.what = HandlerMassages.SUCCESSFUL_LOGIN_MESSAGE;
+                            msg.obj =  token;
+                            actionHandler.sendMessage(msg);
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error instanceof com.android.volley.NetworkError){
+
+                } else if (error instanceof com.android.volley.ServerError){
+                    Toast.makeText(getApplicationContext(), "make sure username and password are correct", Toast.LENGTH_LONG).show();
+                }
+                error.printStackTrace();
+            }
+        }) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject params = new JSONObject();
+                try {
+                    params.put("username", loginCredentials[0]);
+                    params.put("password", loginCredentials[1]);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                return params.toString().getBytes();
+            }
+
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+
+        };
+
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
     @Override
