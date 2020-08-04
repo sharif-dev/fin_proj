@@ -13,6 +13,11 @@
     <string name="title_t">Title:</string>
     <string name="category_t">Category:</string>
     <string name="description_t">Description:</string>
-    <string name="create_advertisement">create advertisement</string>
+    <string name="create_advertisement">Create Advertisement</string>
     <string name="filter">filter</string>
+    <string name="categories_string">Categories</string>
+    <string name="my_profile_string">User</string>
+    <string name="log_out_string">Log Out</string>
+    <string name="my_advertisements">My Advertisements</string>
+    <string name="search">Search</string>
 </resources>
