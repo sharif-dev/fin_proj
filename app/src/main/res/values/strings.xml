@@ -14,4 +14,5 @@
     <string name="category_t">Category:</string>
     <string name="description_t">Description:</string>
     <string name="create_advertisement">create advertisement</string>
+    <string name="filter">filter</string>
 </resources>
