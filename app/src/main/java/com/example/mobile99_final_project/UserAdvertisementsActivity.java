@@ -39,7 +39,7 @@ import com.example.mobile99_final_project.DataModels.AdData;
 import com.example.mobile99_final_project.DataModels.AdListGenerator;
 import com.example.mobile99_final_project.DataModels.CategoryData;
 import com.example.mobile99_final_project.DataModels.CategoryList;
-import com.example.mobile99_final_project.Enums.HandlerMessages;
+import com.example.mobile99_final_project.Enums.HandlerMassages;
 
 
 
@@ -59,7 +59,7 @@ public class UserAdvertisementsActivity extends AppCompatActivity {
 
             if (userAdvertisementsActivity != null){
                 switch (msg.what){
-                    case HandlerMessages.SHOW_AD_DETAILS:
+                    case HandlerMassages.SHOW_AD_DETAILS:
                         System.out.println("clicked");
                         break;
                 }
