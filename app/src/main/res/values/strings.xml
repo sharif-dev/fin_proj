@@ -20,4 +20,6 @@
     <string name="log_out_string">Log Out</string>
     <string name="my_advertisements">My Advertisements</string>
     <string name="search">Search</string>
+    <string name="previous">previous</string>
+    <string name="description">description</string>
 </resources>
