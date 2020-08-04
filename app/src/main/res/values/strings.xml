@@ -10,4 +10,8 @@
     <string name="ad_title">title</string>
     <string name="ad_owner">owner</string>
     <string name="ad_cat">category</string>
+    <string name="title_t">Title:</string>
+    <string name="category_t">Category:</string>
+    <string name="description_t">Description:</string>
+    <string name="create_advertisement">create advertisement</string>
 </resources>
