@@ -6,14 +6,22 @@
         android:layout_height="match_parent"
         tools:context=".NavPack.ui.my_advertisement.UserAdvertisementsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/user_ads_recyclerView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/user_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/user_ads_recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <ProgressBar
             android:id="@+id/user_ads_progressBar"
@@ -23,6 +31,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/user_ads_recyclerView" />
+            app:layout_constraintTop_toTopOf="@id/user_swipe" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

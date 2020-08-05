@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Message;
@@ -75,6 +76,7 @@ public class UserAdvertisementsFragment extends Fragment {
     RecyclerView.LayoutManager recyclerViewLayoutManager;
     ProgressBar userAdsProgressBar;
     UserAdvertisementsFragment.ActionHandler actionHandler;
+    SwipeRefreshLayout refreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +99,7 @@ public class UserAdvertisementsFragment extends Fragment {
 
         userAdsRecyclerView = view.findViewById(R.id.user_ads_recyclerView);
         userAdsProgressBar = view.findViewById(R.id.user_ads_progressBar);
+        refreshLayout = view.findViewById(R.id.user_swipe);
 
         recyclerViewLayoutManager = new LinearLayoutManager(getContext());
         userAdsRecyclerView.setLayoutManager(recyclerViewLayoutManager);
@@ -109,6 +112,16 @@ public class UserAdvertisementsFragment extends Fragment {
             public void run() {
                 getUserAdvertisements();
             }
+        });
+
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(true);
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    getUserAdvertisements();
+                }
+            });
         });
 
         return view;
@@ -133,12 +146,14 @@ public class UserAdvertisementsFragment extends Fragment {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    refreshLayout.setRefreshing(false);
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                refreshLayout.setRefreshing(false);
             }
         });
 
@@ -150,5 +165,6 @@ public class UserAdvertisementsFragment extends Fragment {
         userAdsProgressBar.setVisibility(View.INVISIBLE);
         userAdsRecyclerView.setAdapter(new AdListAdapter(adDataArrayList, actionHandler, categoryHashMap, true));
         userAdsRecyclerView.setVisibility(View.VISIBLE);
+        refreshLayout.setRefreshing(false);
     }
 }
