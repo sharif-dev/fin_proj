@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile99_final_project.Enums.HandlerMassages;
+import com.example.mobile99_final_project.NavPack.MainNavActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -200,11 +201,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void goToFirstPageActivity(String token){
-        Intent intent = new Intent(getBaseContext(), FirstPageActivity.class);
+        Intent intent = new Intent(getBaseContext(), MainNavActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", signUpCredentials[0]);
-
+        DataHolders.getInstance().token = token;
+        DataHolders.getInstance().username = signUpCredentials[0];
         startActivity(intent);
-
     }
 }

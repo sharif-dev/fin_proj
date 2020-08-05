@@ -1,26 +1,24 @@
-package com.example.mobile99_final_project;
+package com.example.mobile99_final_project.NavPack.ui.home;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import android.os.Handler;
 import android.os.Message;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -28,6 +26,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile99_final_project.Adapters.AdListAdapter;
+import com.example.mobile99_final_project.AdvertisementViewActivity;
+import com.example.mobile99_final_project.DataHolders;
+import com.example.mobile99_final_project.DataModels.AdData;
+import com.example.mobile99_final_project.DataModels.AdListGenerator;
+import com.example.mobile99_final_project.DataModels.CategoryData;
+import com.example.mobile99_final_project.DataModels.CategoryListGenerator;
+import com.example.mobile99_final_project.Enums.HandlerMassages;
+import com.example.mobile99_final_project.FirstPageActivity;
+import com.example.mobile99_final_project.MenuActivity;
+import com.example.mobile99_final_project.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,14 +48,8 @@ import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.example.mobile99_final_project.Adapters.AdListAdapter;
-import com.example.mobile99_final_project.DataModels.AdData;
-import com.example.mobile99_final_project.DataModels.AdListGenerator;
-import com.example.mobile99_final_project.DataModels.CategoryData;
-import com.example.mobile99_final_project.DataModels.CategoryListGenerator;
-import com.example.mobile99_final_project.Enums.HandlerMassages;
 
-public class FirstPageActivity extends AppCompatActivity {
+public class HomeFragment extends Fragment {
 
     LocationManager locationManager;
     public static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 0;
@@ -59,23 +62,22 @@ public class FirstPageActivity extends AppCompatActivity {
     public String previousPageURL = "http://142.93.151.73:8000/api/advertisements/";
 
 
-
     public static class ActionHandler extends Handler {
-        private final WeakReference<FirstPageActivity> firstPageActivityWeakReference;
+        private final WeakReference<HomeFragment> firstPageActivityWeakReference;
 
-        public ActionHandler(FirstPageActivity firstPageActivity){
+        public ActionHandler(HomeFragment firstPageActivity) {
             this.firstPageActivityWeakReference = new WeakReference<>(firstPageActivity);
         }
 
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            final FirstPageActivity firstPageActivity = firstPageActivityWeakReference.get();
+            final HomeFragment firstPageActivity = firstPageActivityWeakReference.get();
 
-            if (firstPageActivity != null){
-                switch (msg.what){
+            if (firstPageActivity != null) {
+                switch (msg.what) {
                     case HandlerMassages.GET_COORDS:
-                        firstPageActivity.runOnUiThread(new Runnable() {
+                        firstPageActivity.getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 firstPageActivity.requestCurrentLocation();
@@ -107,6 +109,7 @@ public class FirstPageActivity extends AppCompatActivity {
 //                        break;
                     case HandlerMassages.SHOW_ADS:
                         firstPageActivity.adListProgressBar.setVisibility(View.INVISIBLE);
+                        firstPageActivity.refreshLayout.setRefreshing(false);
                         ArrayList<AdData> adData = (ArrayList<AdData>) msg.obj;
                         firstPageActivity.recyclerView.setAdapter(new AdListAdapter(adData, this, firstPageActivity.categoryHashMap, false));
                         firstPageActivity.recyclerView.setVisibility(View.VISIBLE);
@@ -139,11 +142,11 @@ public class FirstPageActivity extends AppCompatActivity {
     ArrayList<CategoryData> categoryDataList;
     HashMap<Integer, String> categoryHashMap;
 
-    ActionHandler actionHandler;
+    HomeFragment.ActionHandler actionHandler;
     ExecutorService executorService;
 
     //TextView cityTextView;
-    //Button menuButton;
+    Button menuButton;
     //ProgressBar cityNameProgressBar;
 
     RecyclerView recyclerView;
@@ -152,48 +155,60 @@ public class FirstPageActivity extends AppCompatActivity {
 
     Button nextButton;
     Button previousButton;
-    Button reloadButton;
+    //Button reloadButton;
 
     String token;
     String username;
 
+    SwipeRefreshLayout refreshLayout;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_first_page);
 
-        token = getIntent().getStringExtra("token");
-        username = getIntent().getStringExtra("username");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        if (getIntent().hasExtra("current_page")){
-            currentPageURL = getIntent().getStringExtra("current_page");
+        token = DataHolders.getInstance().token;
+        username = DataHolders.getInstance().username;
+
+
+        if (DataHolders.getInstance().currentPage != null) {
+            currentPageURL = DataHolders.getInstance().currentPage;
             previousPageURL = String.copyValueOf(currentPageURL.toCharArray());
             nextPageURL = String.copyValueOf(currentPageURL.toCharArray());
         }
 
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
-        recyclerView = findViewById(R.id.ad_list_recyclerView);
-        recyclerViewLayoutManager = new LinearLayoutManager(this);
+        refreshLayout = view.findViewById(R.id.swipe_container);
+
+        recyclerView = view.findViewById(R.id.ad_list_recyclerView);
+        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-        adListProgressBar = findViewById(R.id.ad_list_progressBar);
+        adListProgressBar = view.findViewById(R.id.ad_list_progressBar);
 
         recyclerView.setVisibility(View.INVISIBLE);
 
         //cityTextView = findViewById(R.id.city_textview);
-        //menuButton = findViewById(R.id.menu_button);
+        menuButton = view.findViewById(R.id.ads_next_button);
         //cityNameProgressBar = findViewById(R.id.city_name_progressBar);
 
-        nextButton = findViewById(R.id.ads_next_button);
-        previousButton = findViewById(R.id.ads_previous_button);
-        reloadButton = findViewById(R.id.ads_next_button);
+        nextButton = view.findViewById(R.id.ads_next_button);
+        previousButton = view.findViewById(R.id.ads_previous_button);
+        //reloadButton = view.findViewById(R.id.reload_button);
 
         executorService = Executors.newFixedThreadPool(10);
 
-        actionHandler = new ActionHandler(this);
+        actionHandler = new HomeFragment.ActionHandler(this);
 
         if (SHOULD_FETCH_LOCATION) {
             Message msg = actionHandler.obtainMessage(HandlerMassages.GET_COORDS);
@@ -201,21 +216,19 @@ public class FirstPageActivity extends AppCompatActivity {
             msg.sendToTarget();
         }
 
-        if (SHOULD_FETCH_CATS){
+        if (SHOULD_FETCH_CATS) {
             Message msg = new Message();
             msg.what = HandlerMassages.GET_CATS;
             actionHandler.sendMessage(msg);
         }
 
 
-
-//
-//        menuButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                goToMenuActivity();
-//            }
-//        });
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToMenuActivity();
+            }
+        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -223,7 +236,7 @@ public class FirstPageActivity extends AppCompatActivity {
 
                 System.out.println(nextPageURL);
 
-                if (nextPageURL != currentPageURL){
+                if (!nextPageURL.equals(currentPageURL)) {
                     previousPageURL = currentPageURL;
                     currentPageURL = nextPageURL;
 
@@ -243,7 +256,7 @@ public class FirstPageActivity extends AppCompatActivity {
         previousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (previousPageURL != currentPageURL) {
+                if (!previousPageURL.equals(currentPageURL)) {
                     nextPageURL = currentPageURL;
                     currentPageURL = previousPageURL;
 
@@ -259,16 +272,19 @@ public class FirstPageActivity extends AppCompatActivity {
                 }
             }
         });
+
+        return view;
     }
 
-//    private void goToMenuActivity(){
-//        Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-//        intent.putExtra("token", token);
-//        intent.putExtra("username", username);
-//        intent.putExtra("categoryDataList", categoryDataList);
-//        startActivity(intent);
-//
-//    }
+
+    private void goToMenuActivity() {
+        Intent intent = new Intent(getContext(), MenuActivity.class);
+        intent.putExtra("token", token);
+        intent.putExtra("username", username);
+        intent.putExtra("categoryDataList", categoryDataList);
+        startActivity(intent);
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -357,7 +373,7 @@ public class FirstPageActivity extends AppCompatActivity {
 //        requestQueue.add(stringRequest);
     }
 
-    private void getAllAdvertisements(){
+    private void getAllAdvertisements() {
         String url = currentPageURL;
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
@@ -375,12 +391,11 @@ public class FirstPageActivity extends AppCompatActivity {
 
                     AdListGenerator adListGenerator = new AdListGenerator(jsonObject);
 
-                    nextPageURL = (next != "null") ? next : currentPageURL;
-                    previousPageURL = (previous != "null") ? previous : currentPageURL;
+                    nextPageURL = (!next.equals("null")) ? next : currentPageURL;
+                    previousPageURL = (!previous.equals("null")) ? previous : currentPageURL;
 
                     System.out.println(nextPageURL);
                     System.out.println(previousPageURL);
-
 
 
                     Message msg = new Message();
@@ -388,8 +403,6 @@ public class FirstPageActivity extends AppCompatActivity {
                     msg.obj = adListGenerator.getList();
 
                     actionHandler.sendMessage(msg);
-
-
 
 
                 } catch (JSONException e) {
@@ -403,11 +416,11 @@ public class FirstPageActivity extends AppCompatActivity {
             }
         });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
     }
 
-    private void getCategories(){
+    private void getCategories() {
 
         String url = "http://142.93.151.73:8000/api/categories/";
 
@@ -439,29 +452,38 @@ public class FirstPageActivity extends AppCompatActivity {
             }
         });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
     }
 
-    private void bindOnClickForReloadButton(){
-        reloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                recyclerView.setVisibility(View.INVISIBLE);
-                adListProgressBar.setVisibility(View.VISIBLE);
-                executorService.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        getAllAdvertisements();
-                    }
-                });
-            }
+    private void bindOnClickForReloadButton() {
+        refreshLayout.setOnRefreshListener(() -> {
+            refreshLayout.setRefreshing(true);
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    getAllAdvertisements();
+                }
+            });
         });
+//        reloadButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                recyclerView.setVisibility(View.INVISIBLE);
+//                adListProgressBar.setVisibility(View.VISIBLE);
+//                executorService.execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        getAllAdvertisements();
+//                    }
+//                });
+//            }
+//        });
     }
 
-    public void showAdDetails(AdData adData){
+    public void showAdDetails(AdData adData) {
 
-        Intent intent = new Intent(getBaseContext(), AdvertisementViewActivity.class);
+        Intent intent = new Intent(getContext(), AdvertisementViewActivity.class);
         intent.putExtra("AdData", adData);
         intent.putExtra("categoryDataList", categoryDataList);
         startActivity(intent);

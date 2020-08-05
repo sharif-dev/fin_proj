@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.mobile99_final_project.NavPack.MainNavActivity;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     TextInputEditText passwordET;
     TextView signuptv1;
     TextView signuptv2;
+
+    boolean debug = true;
 
     private static class ActionHandler extends Handler {
         private final WeakReference<MainActivity> mainActivityWeakReference;
@@ -138,12 +141,24 @@ public class MainActivity extends AppCompatActivity {
                 gotToSignUpActivity();
             }
         });
+
+        if (debug) {
+            loginCredentials[0] = "saleh";
+            loginCredentials[1] = "1234";
+            if (!loginCredentials[0].equals("") && !loginCredentials[1].equals("")) {
+                Message msg = new Message();
+                msg.what = HandlerMassages.LOGIN_MESSAGE;
+                actionHandler.sendMessage(msg);
+            }
+        }
     }
 
     private void goToFirstPageActivity(String token) {
-        Intent intent = new Intent(getBaseContext(), FirstPageActivity.class);
+        Intent intent = new Intent(getBaseContext(), MainNavActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", loginCredentials[0]);
+        DataHolders.getInstance().token = token;
+        DataHolders.getInstance().username = loginCredentials[0];
         startActivity(intent);
     }
 
