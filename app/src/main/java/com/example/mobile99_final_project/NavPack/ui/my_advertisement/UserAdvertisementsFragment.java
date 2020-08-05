@@ -2,65 +2,153 @@ package com.example.mobile99_final_project.NavPack.ui.my_advertisement;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.Volley;
+import com.example.mobile99_final_project.Adapters.AdListAdapter;
+import com.example.mobile99_final_project.DataHolders;
+import com.example.mobile99_final_project.DataModels.AdData;
+import com.example.mobile99_final_project.DataModels.AdListGenerator;
+import com.example.mobile99_final_project.DataModels.CategoryData;
+import com.example.mobile99_final_project.DataModels.CategoryList;
+import com.example.mobile99_final_project.Enums.HandlerMassages;
 import com.example.mobile99_final_project.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link UserAdvertisementsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class UserAdvertisementsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static class ActionHandler extends Handler {
+        private final WeakReference<UserAdvertisementsFragment> userAdvertisementsActivityWeakReference;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+        public ActionHandler(UserAdvertisementsFragment userAdvertisementsActivity){
+            this.userAdvertisementsActivityWeakReference = new WeakReference<>(userAdvertisementsActivity);
+        }
 
-    public UserAdvertisementsFragment() {
-        // Required empty public constructor
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            final UserAdvertisementsFragment userAdvertisementsActivity = userAdvertisementsActivityWeakReference.get();
+
+            if (userAdvertisementsActivity != null){
+                switch (msg.what){
+                    case HandlerMassages.SHOW_AD_DETAILS:
+                        System.out.println("clicked");
+                        break;
+                }
+            }
+        }
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserAdvertisementsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static UserAdvertisementsFragment newInstance(String param1, String param2) {
-        UserAdvertisementsFragment fragment = new UserAdvertisementsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    String token;
+    String username;
+
+    ArrayList<CategoryData> categoryDataList;
+    HashMap<Integer, String> categoryHashMap;
+
+
+    ExecutorService executorService;
+
+    RecyclerView userAdsRecyclerView;
+    RecyclerView.LayoutManager recyclerViewLayoutManager;
+    ProgressBar userAdsProgressBar;
+    UserAdvertisementsFragment.ActionHandler actionHandler;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_advertisements, container, false);
+        View view = inflater.inflate(R.layout.fragment_user_advertisements, container, false);
+
+        actionHandler = new UserAdvertisementsFragment.ActionHandler(this);
+
+        token = DataHolders.getInstance().token;
+        username = DataHolders.getInstance().username;
+        categoryDataList = DataHolders.getInstance().categoryDataList;
+        CategoryList cl = new CategoryList(categoryDataList);
+        categoryHashMap = cl.getCategoryHashMap();
+
+        userAdsRecyclerView = view.findViewById(R.id.user_ads_recyclerView);
+        userAdsProgressBar = view.findViewById(R.id.user_ads_progressBar);
+
+        recyclerViewLayoutManager = new LinearLayoutManager(getContext());
+        userAdsRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+        userAdsRecyclerView.setVisibility(View.INVISIBLE);
+
+        executorService = Executors.newFixedThreadPool(1);
+
+        executorService.execute(new Runnable() {
+            @Override
+            public void run() {
+                getUserAdvertisements();
+            }
+        });
+
+        return view;
+    }
+
+
+    private void getUserAdvertisements(){
+        String url = "http://142.93.151.73:8000/api/user-ads/?username="+username;
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                System.out.println(response.toString());
+                try {
+                    final AdListGenerator adListGenerator = new AdListGenerator(response);
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showUserAds(adListGenerator.getList());
+                        }
+                    });
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        requestQueue.add(jsonArrayRequest);
+    }
+
+    private void showUserAds(ArrayList<AdData> adDataArrayList){
+        userAdsProgressBar.setVisibility(View.INVISIBLE);
+        userAdsRecyclerView.setAdapter(new AdListAdapter(adDataArrayList, actionHandler, categoryHashMap, true));
+        userAdsRecyclerView.setVisibility(View.VISIBLE);
     }
 }

@@ -44,7 +44,23 @@
                         app:layout_constraintTop_toTopOf="parent" />&ndash;&gt;
     </androidx.constraintlayout.widget.ConstraintLayout>-->
 
+    <Button
+            android:id="@+id/reset_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/yellow_bg"
+            android:fontFamily="@font/font_karla_bold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Clear Filters"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="10dp"
@@ -52,7 +68,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/reset_filters">
 
         <ProgressBar
                 android:id="@+id/ad_list_progressBar"

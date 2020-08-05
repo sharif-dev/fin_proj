@@ -7,12 +7,15 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,14 +142,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    ArrayList<CategoryData> categoryDataList;
     HashMap<Integer, String> categoryHashMap;
 
     HomeFragment.ActionHandler actionHandler;
     ExecutorService executorService;
 
     //TextView cityTextView;
-    Button menuButton;
+    //Button menuButton;
     //ProgressBar cityNameProgressBar;
 
     RecyclerView recyclerView;
@@ -155,6 +157,7 @@ public class HomeFragment extends Fragment {
 
     Button nextButton;
     Button previousButton;
+    Button clearFilter;
     //Button reloadButton;
 
     String token;
@@ -177,12 +180,16 @@ public class HomeFragment extends Fragment {
 
         token = DataHolders.getInstance().token;
         username = DataHolders.getInstance().username;
+        clearFilter = view.findViewById(R.id.reset_filters);
 
-
-        if (DataHolders.getInstance().currentPage != null) {
+        if ((DataHolders.getInstance().currentPage != null) && !(getArguments() != null && getArguments().getString("reset") != null)) {
+            clearFilter.setVisibility(View.VISIBLE);
             currentPageURL = DataHolders.getInstance().currentPage;
             previousPageURL = String.copyValueOf(currentPageURL.toCharArray());
             nextPageURL = String.copyValueOf(currentPageURL.toCharArray());
+        } else {
+            clearFilter.setVisibility(View.GONE);
+            DataHolders.getInstance().currentPage = null;
         }
 
 
@@ -199,11 +206,12 @@ public class HomeFragment extends Fragment {
         recyclerView.setVisibility(View.INVISIBLE);
 
         //cityTextView = findViewById(R.id.city_textview);
-        menuButton = view.findViewById(R.id.ads_next_button);
+        //menuButton = view.findViewById(R.id.ads_next_button);
         //cityNameProgressBar = findViewById(R.id.city_name_progressBar);
 
         nextButton = view.findViewById(R.id.ads_next_button);
         previousButton = view.findViewById(R.id.ads_previous_button);
+
         //reloadButton = view.findViewById(R.id.reload_button);
 
         executorService = Executors.newFixedThreadPool(10);
@@ -223,12 +231,12 @@ public class HomeFragment extends Fragment {
         }
 
 
-        menuButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goToMenuActivity();
-            }
-        });
+//        menuButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                goToMenuActivity();
+//            }
+//        });
 
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +281,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        clearFilter.setOnClickListener((view1) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("reset", "true");
+            NavHostFragment.findNavController(this).navigate(R.id.action_nav_home_self, bundle);
+        });
+
+        Log.i("tagtagtag", "oncreate");
+
         return view;
     }
 
@@ -281,7 +297,7 @@ public class HomeFragment extends Fragment {
         Intent intent = new Intent(getContext(), MenuActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", username);
-        intent.putExtra("categoryDataList", categoryDataList);
+        intent.putExtra("categoryDataList", DataHolders.getInstance().categoryDataList);
         startActivity(intent);
 
     }
@@ -434,7 +450,7 @@ public class HomeFragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(response);
                     CategoryListGenerator categoryListGenerator = new CategoryListGenerator(jsonObject);
 
-                    categoryDataList = categoryListGenerator.getCategoryList().getData();
+                    DataHolders.getInstance().categoryDataList = categoryListGenerator.getCategoryList().getData();
                     categoryHashMap = categoryListGenerator.getCategoryList().getCategoryHashMap();
 
                     Message msg = new Message();
@@ -485,7 +501,7 @@ public class HomeFragment extends Fragment {
 
         Intent intent = new Intent(getContext(), AdvertisementViewActivity.class);
         intent.putExtra("AdData", adData);
-        intent.putExtra("categoryDataList", categoryDataList);
+        intent.putExtra("categoryDataList", DataHolders.getInstance().categoryDataList);
         startActivity(intent);
 
     }

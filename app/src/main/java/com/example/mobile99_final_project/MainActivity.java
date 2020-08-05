@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (debug) {
-            loginCredentials[0] = "saleh";
+            loginCredentials[0] = "salehsagharchi";
             loginCredentials[1] = "1234";
             if (!loginCredentials[0].equals("") && !loginCredentials[1].equals("")) {
                 Message msg = new Message();
@@ -153,12 +153,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        usernameET.setText("");
+        passwordET.setText("");
+    }
+
     private void goToFirstPageActivity(String token) {
         Intent intent = new Intent(getBaseContext(), MainNavActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", loginCredentials[0]);
         DataHolders.getInstance().token = token;
         DataHolders.getInstance().username = loginCredentials[0];
+        DataHolders.getInstance().currentPage = null;
+        DataHolders.getInstance().categoryDataList = null;
         startActivity(intent);
     }
 

@@ -206,6 +206,8 @@ public class SignUpActivity extends AppCompatActivity {
         intent.putExtra("username", signUpCredentials[0]);
         DataHolders.getInstance().token = token;
         DataHolders.getInstance().username = signUpCredentials[0];
+        DataHolders.getInstance().currentPage = null;
+        DataHolders.getInstance().categoryDataList = null;
         startActivity(intent);
     }
 }

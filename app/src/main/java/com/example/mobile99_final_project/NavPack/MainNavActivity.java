@@ -11,12 +11,16 @@ import android.widget.Toast;
 
 import com.example.mobile99_final_project.DataHolders;
 import com.example.mobile99_final_project.MainActivity;
+import com.example.mobile99_final_project.NavPack.ui.create_advertisement.AdvertisementCreationFragment;
+import com.example.mobile99_final_project.NavPack.ui.search.SearchFragment;
 import com.example.mobile99_final_project.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.core.view.GravityCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -60,6 +64,7 @@ public class MainNavActivity extends AppCompatActivity {
 
 
         Log.i("tagtagtag", DataHolders.getInstance().token);
+
     }
 
 //    @Override
