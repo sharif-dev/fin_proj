@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.mobile99_final_project.Enums.HandlerMassages;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +32,10 @@ public class SignUpActivity extends AppCompatActivity {
 
     String Token;
     Button createAccountButton;
-    EditText usernameText;
-    EditText passwordText;
-    EditText c_passwordText;
-    EditText phoneText;
+    TextInputEditText usernameText;
+    TextInputEditText passwordText;
+    TextInputEditText c_passwordText;
+    TextInputEditText phoneText;
 
     Handler actionHandler;
 
@@ -47,15 +48,20 @@ public class SignUpActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
+
         Token = getIntent().getStringExtra("token");
 
         executorService = Executors.newSingleThreadExecutor();
 
-        createAccountButton = findViewById(R.id.create_account_button);
-        usernameText = findViewById(R.id.username_edittext_signup);
-        passwordText = findViewById(R.id.password_edittext_signup);
-        c_passwordText = findViewById(R.id.c_password_edittext_signup);
-        phoneText = findViewById(R.id.phone_edittext_signup);
+        createAccountButton = findViewById(R.id.signup_button);
+        usernameText = findViewById(R.id.username_reg_edittext);
+        passwordText = findViewById(R.id.password_reg_edittext);
+        c_passwordText = findViewById(R.id.cpassword_reg_edittext);
+        phoneText = findViewById(R.id.phone_reg_edittext);
 
         actionHandler = new Handler(){
             @Override

@@ -3,7 +3,7 @@
     <string name="username_textview">Username</string>
     <string name="password_textview">Password</string>
     <string name="login">LOGIN</string>
-    <string name="signup">SIGNUP</string>
+    <string name="signup">SIGN UP</string>
     <string name="confirm_password_textview">Confirm password</string>
     <string name="phone_number_textview">Phone number</string>
     <string name="create_account">create account</string>
@@ -28,4 +28,5 @@
     <string name="login_tv_title">Login App</string>
     <string name="signupfirst">Don\'t have an account ?</string>
     <string name="signupsecond">Sign Up!</string>
+    <string name="signup_tv_title">Create Account</string>
 </resources>

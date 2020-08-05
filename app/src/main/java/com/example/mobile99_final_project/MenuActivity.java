@@ -5,6 +5,7 @@ import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -102,6 +103,7 @@ public class MenuActivity extends AppCompatActivity {
         intent.putExtra("username", username);
         intent.putExtra("categoryDataList", categoryDataList);
         intent.putExtra("top_cat_id", -1);
+        Log.i("tagtagtag", token + "  ,,  " + username + "  ,,  " + categoryDataList.size());
         startActivity(intent);
     }
 
