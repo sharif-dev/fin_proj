@@ -22,4 +22,7 @@
     <string name="search">Search</string>
     <string name="previous">previous</string>
     <string name="description">description</string>
+    <string name="reload">Reload</string>
+    <string name="next">Next</string>
+    <string name="menu_string">Menu</string>
 </resources>
