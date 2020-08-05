@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error instanceof com.android.volley.NetworkError){
+                    Toast.makeText(getApplicationContext(), "there was a network error, check your connection or try again later", Toast.LENGTH_LONG).show();
 
                 } else if (error instanceof com.android.volley.ServerError){
                     Toast.makeText(getApplicationContext(), "make sure username and password are correct", Toast.LENGTH_LONG).show();
