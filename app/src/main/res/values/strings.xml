@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">Mobile99_Final_Project</string>
-    <string name="username_textview">username</string>
-    <string name="password_textview">password</string>
-    <string name="login">login</string>
-    <string name="signup">sign up</string>
-    <string name="confirm_password_textview">confirm password</string>
-    <string name="phone_number_textview">phone num. - ex.:09*********</string>
+    <string name="username_textview">Username</string>
+    <string name="password_textview">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="signup">SIGNUP</string>
+    <string name="confirm_password_textview">Confirm password</string>
+    <string name="phone_number_textview">Phone number</string>
     <string name="create_account">create account</string>
     <string name="ad_title">title</string>
     <string name="ad_owner">owner</string>
@@ -25,4 +25,7 @@
     <string name="reload">Reload</string>
     <string name="next">Next</string>
     <string name="menu_string">Menu</string>
+    <string name="login_tv_title">Login App</string>
+    <string name="signupfirst">Don\'t have an account ?</string>
+    <string name="signupsecond">Sign Up!</string>
 </resources>

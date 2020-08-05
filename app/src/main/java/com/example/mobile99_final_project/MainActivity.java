@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
@@ -26,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,9 +35,14 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
-    Button signUpButton;
-    EditText usernameText;
-    EditText passwordText;
+    //Button signUpButton;
+    //EditText usernameText;
+    //EditText passwordText;
+
+    TextInputEditText usernameET;
+    TextInputEditText passwordET;
+    TextView signuptv1;
+    TextView signuptv2;
 
     private static class ActionHandler extends Handler {
         private final WeakReference<MainActivity> mainActivityWeakReference;
@@ -86,11 +93,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loginButton = findViewById(R.id.login_button);
-        signUpButton = findViewById(R.id.signup_button);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
-        usernameText = findViewById(R.id.username_edittext);
-        passwordText = findViewById(R.id.password_edittext);
+        loginButton = findViewById(R.id.login_button);
+        //signUpButton = findViewById(R.id.signup_button);
+
+        usernameET = findViewById(R.id.username_edittext);
+        passwordET = findViewById(R.id.password_edittext);
+        signuptv1 = findViewById(R.id.signupfirst);
+        signuptv2 = findViewById(R.id.signupsecond);
 
         loginCredentials = new String[2];
 
@@ -101,8 +114,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                loginCredentials[0] = usernameText.getText().toString();
-                loginCredentials[1] = passwordText.getText().toString();
+                loginCredentials[0] = usernameET.getText().toString();
+                loginCredentials[1] = passwordET.getText().toString();
                 Message msg = new Message();
                 msg.what = HandlerMassages.LOGIN_MESSAGE;
                 actionHandler.sendMessage(msg);
@@ -110,7 +123,13 @@ public class MainActivity extends AppCompatActivity {
         });
         
         
-        signUpButton.setOnClickListener(new View.OnClickListener() {
+        signuptv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotToSignUpActivity();
+            }
+        });
+        signuptv2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gotToSignUpActivity();
