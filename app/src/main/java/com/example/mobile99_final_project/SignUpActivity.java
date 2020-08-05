@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -106,6 +107,28 @@ public class SignUpActivity extends AppCompatActivity {
         String pass = passwordText.getText().toString();
         String c_pass = c_passwordText.getText().toString();
         String phone = phoneText.getText().toString();
+
+        if (username.contains(" ")){
+            Toast.makeText(this,"username should not contain white-space", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (pass.contains(" ")){
+            Toast.makeText(this,"password should not contain white-space", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (!pass.equals(c_pass)){
+            Toast.makeText(this,"make sure confirm password and password are the same", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (phone.length() != 11 || !phone.substring(0,2).equals("09")){
+            Toast.makeText(this,"make sure the phone number is entered according to the example template", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+
 
         return true;
     }
