@@ -50,7 +50,7 @@ public class FirstPageActivity extends AppCompatActivity {
 
     LocationManager locationManager;
     public static final int MY_PERMISSIONS_ACCESS_COARSE_LOCATION = 0;
-    public boolean SHOULD_FETCH_LOCATION = true;
+    public boolean SHOULD_FETCH_LOCATION = false;
     public boolean SHOULD_FETCH_ADS = true;
     public boolean SHOULD_FETCH_CATS = true;
 
@@ -83,20 +83,20 @@ public class FirstPageActivity extends AppCompatActivity {
                         });
 
                         break;
-                    case HandlerMassages.GET_CITY:
-                        final String coords = (String) msg.obj;
-                        firstPageActivity.executorService.execute(new Runnable() {
-                            @Override
-                            public void run() {
-                                firstPageActivity.getCityByCoords(coords);
-                            }
-                        });
-                        break;
-                    case HandlerMassages.SET_CITY:
-                        final String cityName = (String) msg.obj;
-                        firstPageActivity.cityTextView.setText(cityName);
-                        firstPageActivity.cityNameProgressBar.setVisibility(View.INVISIBLE);
-                        break;
+//                    case HandlerMassages.GET_CITY:
+//                        final String coords = (String) msg.obj;
+//                        firstPageActivity.executorService.execute(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                firstPageActivity.getCityByCoords(coords);
+//                            }
+//                        });
+//                        break;
+//                    case HandlerMassages.SET_CITY:
+//                        final String cityName = (String) msg.obj;
+//                        firstPageActivity.cityTextView.setText(cityName);
+//                        firstPageActivity.cityNameProgressBar.setVisibility(View.INVISIBLE);
+//                        break;
 //                    case HandlerMassages.FETCH_ADS:
 //                        firstPageActivity.executorService.execute(new Runnable() {
 //                            @Override
@@ -142,9 +142,9 @@ public class FirstPageActivity extends AppCompatActivity {
     ActionHandler actionHandler;
     ExecutorService executorService;
 
-    TextView cityTextView;
+    //TextView cityTextView;
     Button menuButton;
-    ProgressBar cityNameProgressBar;
+    //ProgressBar cityNameProgressBar;
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager recyclerViewLayoutManager;
@@ -183,9 +183,9 @@ public class FirstPageActivity extends AppCompatActivity {
 
         recyclerView.setVisibility(View.INVISIBLE);
 
-        cityTextView = findViewById(R.id.city_textview);
+        //cityTextView = findViewById(R.id.city_textview);
         menuButton = findViewById(R.id.menu_button);
-        cityNameProgressBar = findViewById(R.id.city_name_progressBar);
+        //cityNameProgressBar = findViewById(R.id.city_name_progressBar);
 
         nextButton = findViewById(R.id.ads_next_button);
         previousButton = findViewById(R.id.ads_previous_button);
@@ -272,89 +272,89 @@ public class FirstPageActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == MY_PERMISSIONS_ACCESS_COARSE_LOCATION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                requestCurrentLocation();
-            } else {
-                SHOULD_FETCH_LOCATION = false;
-            }
-        }
+//        if (requestCode == MY_PERMISSIONS_ACCESS_COARSE_LOCATION) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                requestCurrentLocation();
+//            } else {
+//                SHOULD_FETCH_LOCATION = false;
+//            }
+//        }
     }
 
     private void requestCurrentLocation() {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
-        } else {
-
-            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            if (lastKnownLocation == null) {
-
-                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
-                    @Override
-                    public void onLocationChanged(Location location) {
-                        System.out.println("locchang");
-                        Message msg = new Message();
-                        msg.what = HandlerMassages.GET_CITY;
-                        msg.obj = "lat=" + location.getLatitude() + "&lon=" + location.getLongitude();
-                        actionHandler.sendMessage(msg);
-                    }
-
-                    @Override
-                    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                    }
-
-                    @Override
-                    public void onProviderEnabled(String provider) {
-
-                    }
-
-                    @Override
-                    public void onProviderDisabled(String provider) {
-
-                    }
-                });
-            } else {
-                Message msg = new Message();
-                msg.what = HandlerMassages.GET_CITY;
-                msg.obj = "lat=" + lastKnownLocation.getLatitude() + "&lon=" + lastKnownLocation.getLongitude();
-                actionHandler.sendMessage(msg);
-            }
-        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+//                    MY_PERMISSIONS_ACCESS_COARSE_LOCATION);
+//        } else {
+//
+//            Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//            if (lastKnownLocation == null) {
+//
+//                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, new LocationListener() {
+//                    @Override
+//                    public void onLocationChanged(Location location) {
+//                        System.out.println("locchang");
+//                        Message msg = new Message();
+//                        msg.what = HandlerMassages.GET_CITY;
+//                        msg.obj = "lat=" + location.getLatitude() + "&lon=" + location.getLongitude();
+//                        actionHandler.sendMessage(msg);
+//                    }
+//
+//                    @Override
+//                    public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProviderEnabled(String provider) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onProviderDisabled(String provider) {
+//
+//                    }
+//                });
+//            } else {
+//                Message msg = new Message();
+//                msg.what = HandlerMassages.GET_CITY;
+//                msg.obj = "lat=" + lastKnownLocation.getLatitude() + "&lon=" + lastKnownLocation.getLongitude();
+//                actionHandler.sendMessage(msg);
+//            }
+//        }
 
 
     }
 
     private void getCityByCoords(String coords) {
-        String url = "https://eu1.locationiq.com/v1/reverse.php?key=fc584252e587ed&" + coords + "&format=json&accept-language=native";
-        System.out.println(url);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    System.out.println(response);
-                    JSONObject jsonObject = new JSONObject(response);
-                    String cityName = jsonObject.getJSONObject("address").getString("state");
-                    Message msg = new Message();
-                    msg.what = HandlerMassages.SET_CITY;
-                    msg.obj = cityName;
-                    actionHandler.sendMessage(msg);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+//        String url = "https://eu1.locationiq.com/v1/reverse.php?key=fc584252e587ed&" + coords + "&format=json&accept-language=native";
+//        System.out.println(url);
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    System.out.println(response);
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    String cityName = jsonObject.getJSONObject("address").getString("state");
+//                    Message msg = new Message();
+//                    msg.what = HandlerMassages.SET_CITY;
+//                    msg.obj = cityName;
+//                    actionHandler.sendMessage(msg);
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//
+//            }
+//        });
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(this);
+//        requestQueue.add(stringRequest);
     }
 
     private void getAllAdvertisements(){

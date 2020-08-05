@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     private static class ActionHandler extends Handler {
         private final WeakReference<MainActivity> mainActivityWeakReference;
-        public ActionHandler(MainActivity mainActivity){
+
+        public ActionHandler(MainActivity mainActivity) {
             this.mainActivityWeakReference = new WeakReference<>(mainActivity);
         }
 
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             final MainActivity mainAcitvity = mainActivityWeakReference.get();
-            if (mainAcitvity != null){
-                switch (msg.what){
+            if (mainAcitvity != null) {
+                switch (msg.what) {
                     case HandlerMassages.LOGIN_MESSAGE:
                         mainAcitvity.executorService.execute(new Runnable() {
                             @Override
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     case HandlerMassages.TOKEN_CHECK_SUCCESS:
                         mainAcitvity.goToFirstPageActivity((String) msg.obj);
                         break;
-                        
+
                 }
             }
         }
@@ -116,13 +117,15 @@ public class MainActivity extends AppCompatActivity {
 
                 loginCredentials[0] = usernameET.getText().toString();
                 loginCredentials[1] = passwordET.getText().toString();
-                Message msg = new Message();
-                msg.what = HandlerMassages.LOGIN_MESSAGE;
-                actionHandler.sendMessage(msg);
+                if (!loginCredentials[0].equals("") && !loginCredentials[1].equals("")) {
+                    Message msg = new Message();
+                    msg.what = HandlerMassages.LOGIN_MESSAGE;
+                    actionHandler.sendMessage(msg);
+                }
             }
         });
-        
-        
+
+
         signuptv1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,19 +140,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void goToFirstPageActivity(String token){
+    private void goToFirstPageActivity(String token) {
         Intent intent = new Intent(getBaseContext(), FirstPageActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", loginCredentials[0]);
         startActivity(intent);
     }
 
-    private void gotToSignUpActivity(){
+    private void gotToSignUpActivity() {
         Intent intent = new Intent(getBaseContext(), SignUpActivity.class);
         startActivity(intent);
     }
 
-    private void getLoginToken(){
+    private void getLoginToken() {
         String url = "http://142.93.151.73:8000/api-auth/";
 
         final StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -166,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         public void run() {
                             Message msg = new Message();
                             msg.what = HandlerMassages.SUCCESSFUL_LOGIN_MESSAGE;
-                            msg.obj =  token;
+                            msg.obj = token;
                             actionHandler.sendMessage(msg);
                         }
                     });
@@ -178,10 +181,10 @@ public class MainActivity extends AppCompatActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if (error instanceof com.android.volley.NetworkError){
+                if (error instanceof com.android.volley.NetworkError) {
                     Toast.makeText(getApplicationContext(), "there was a network error, check your connection or try again later", Toast.LENGTH_LONG).show();
 
-                } else if (error instanceof com.android.volley.ServerError){
+                } else if (error instanceof com.android.volley.ServerError) {
                     Toast.makeText(getApplicationContext(), "make sure username and password are correct", Toast.LENGTH_LONG).show();
                 }
                 error.printStackTrace();
