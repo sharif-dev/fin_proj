@@ -209,5 +209,6 @@ public class SignUpActivity extends AppCompatActivity {
         DataHolders.getInstance().currentPage = null;
         DataHolders.getInstance().categoryDataList = null;
         startActivity(intent);
+        finish();
     }
 }

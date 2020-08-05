@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     TextView signuptv1;
     TextView signuptv2;
 
-    boolean debug = true;
+    boolean debug = false;
 
     private static class ActionHandler extends Handler {
         private final WeakReference<MainActivity> mainActivityWeakReference;
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
         DataHolders.getInstance().currentPage = null;
         DataHolders.getInstance().categoryDataList = null;
         startActivity(intent);
+        finish();
     }
 
     private void gotToSignUpActivity() {

@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 
 public class CategoriesActivity extends AppCompatActivity {
 
+
     public static class ActionHandler extends Handler {
         private final WeakReference<CategoriesActivity> categoriesWeakReference;
 
@@ -39,9 +40,9 @@ public class CategoriesActivity extends AppCompatActivity {
             if (categoriesActivity != null){
                 switch (msg.what){
                     case HandlerMassages.SHOW_FETCHED_CATS:
-                        CategoryList categoryList = (CategoryList) msg.obj;
-                        categoriesActivity.progressBar.setVisibility(View.INVISIBLE);
-                        categoriesActivity.recyclerView.setAdapter(new CategoryListAdapter(categoryList.getData(), this));
+//                        CategoryList categoryList = (CategoryList) msg.obj;
+//                        categoriesActivity.progressBar.setVisibility(View.INVISIBLE);
+//                        categoriesActivity.recyclerView.setAdapter(new CategoryListAdapter(categoryList.getData(), this));
 
                         break;
 
@@ -79,46 +80,46 @@ public class CategoriesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_categories);
-
-        recyclerView = findViewById(R.id.category_list_recyclerView);
-        recyclerViewLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(recyclerViewLayoutManager);
-
-        progressBar = findViewById(R.id.categories_progressBar);
-        filterButton = findViewById(R.id.filter_button);
-
-        executorService = Executors.newFixedThreadPool(2);
-
-        actionHandler = new ActionHandler(this);
-
-        token = getIntent().getStringExtra("token");
-        username = getIntent().getStringExtra("username");
-
-        int count = getIntent().getIntExtra("count",0);
-        list = (ArrayList<CategoryData>) getIntent().getSerializableExtra("categoryDataList");
-        top_cat_id = getIntent().getIntExtra("top_cat_id", -1);
-        cat_name = getIntent().getStringExtra("cat_name");
-        System.out.println("topcatid: "+ top_cat_id);
-
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setAdapter(new CategoryListAdapter(list, actionHandler));
-
-        System.out.println("hahahasdasdafsdf");
-
-        filterButton.setVisibility(View.INVISIBLE);
-
-        setTitle("All Categories");
-
-        if (top_cat_id > 0){
-            filterButton.setVisibility(View.VISIBLE);
-            setTitle(cat_name);
-            filterButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    goToFirstPageActivityShowByCategory(top_cat_id);
-                }
-            });
-        }
+//
+//        recyclerView = findViewById(R.id.category_list_recyclerView);
+//        recyclerViewLayoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(recyclerViewLayoutManager);
+//
+//        progressBar = findViewById(R.id.categories_progressBar);
+//        filterButton = findViewById(R.id.filter_button);
+//
+//        executorService = Executors.newFixedThreadPool(2);
+//
+//        actionHandler = new ActionHandler(this);
+//
+//        token = getIntent().getStringExtra("token");
+//        username = getIntent().getStringExtra("username");
+//
+//        int count = getIntent().getIntExtra("count",0);
+//        list = (ArrayList<CategoryData>) getIntent().getSerializableExtra("categoryDataList");
+//        top_cat_id = getIntent().getIntExtra("top_cat_id", -1);
+//        cat_name = getIntent().getStringExtra("cat_name");
+//        System.out.println("topcatid: "+ top_cat_id);
+//
+//        progressBar.setVisibility(View.INVISIBLE);
+//        recyclerView.setAdapter(new CategoryListAdapter(list, actionHandler));
+//
+//        System.out.println("hahahasdasdafsdf");
+//
+//        filterButton.setVisibility(View.INVISIBLE);
+//
+//        setTitle("All Categories");
+//
+//        if (top_cat_id > 0){
+//            filterButton.setVisibility(View.VISIBLE);
+//            setTitle(cat_name);
+//            filterButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    goToFirstPageActivityShowByCategory(top_cat_id);
+//                }
+//            });
+//        }
 
 
     }

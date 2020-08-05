@@ -6,25 +6,42 @@
         android:layout_height="match_parent"
         tools:context=".NavPack.ui.search.SearchFragment">
 
-    <EditText
-            android:id="@+id/search_editText"
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="192dp"
-            android:hint="@string/search"
-            android:textSize="24sp"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="-16dp" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="200dp"
+            android:layout_marginRight="20dp"
+            android:hint="Enter your keyword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/search_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <Button
             android:id="@+id/search_Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/onboarding5_activity_login_button_ripple"
+            android:fontFamily="@font/font_karla_bold"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
             android:text="@string/search"
+            android:paddingEnd="50dp"
+            android:paddingStart="50dp"
+            android:layout_marginTop="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/search_editText"
-            app:layout_constraintVertical_bias="0.086" />
+            app:layout_constraintTop_toBottomOf="@id/search_layout"
+            app:layout_constraintVertical_bias="0.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -45,5 +45,7 @@ public class AdvertisementViewActivity extends AppCompatActivity {
             catTextView.setText(categoryHashMap.get(adData.category));
             descriptionTextView.setText(adData.description);
         }
+
+        setTitle("Advertisement Details");
     }
 }

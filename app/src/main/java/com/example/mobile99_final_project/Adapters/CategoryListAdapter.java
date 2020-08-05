@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mobile99_final_project.CategoriesActivity;
 import com.example.mobile99_final_project.DataModels.CategoryData;
 import com.example.mobile99_final_project.Enums.HandlerMassages;
+import com.example.mobile99_final_project.NavPack.ui.categories.CategoriesFragment;
 import com.example.mobile99_final_project.R;
 
 import java.util.ArrayList;
@@ -34,9 +35,9 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     }
 
     final ArrayList<CategoryData> finalList;
-    CategoriesActivity.ActionHandler actionHandler;
+    CategoriesFragment.ActionHandler actionHandler;
 
-    public CategoryListAdapter(ArrayList<CategoryData> list, CategoriesActivity.ActionHandler actionHandler) {
+    public CategoryListAdapter(ArrayList<CategoryData> list, CategoriesFragment.ActionHandler actionHandler) {
         this.finalList = list;
         this.actionHandler = actionHandler;
     }

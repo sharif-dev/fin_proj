@@ -21,7 +21,16 @@
             android:id="@+id/nav_categories"
             android:name="com.example.mobile99_final_project.NavPack.ui.categories.CategoriesFragment"
             android:label="@string/categories_string"
-            tools:layout="@layout/fragment_categories" />
+            tools:layout="@layout/fragment_categories" >
+        <action
+                android:id="@+id/action_nav_categories_to_mobile_navigation"
+                app:destination="@id/mobile_navigation"
+                app:popUpTo="@id/mobile_navigation"
+                app:popUpToInclusive="true" />
+        <action
+                android:id="@+id/action_nav_categories_self"
+                app:destination="@id/nav_categories" />
+    </fragment>
 
     <fragment
             android:id="@+id/nav_my_advertisement"
