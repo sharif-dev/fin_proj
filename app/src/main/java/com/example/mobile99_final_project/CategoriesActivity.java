@@ -47,7 +47,7 @@ public class CategoriesActivity extends AppCompatActivity {
 
                     case HandlerMassages.SHOW_SUB_CATS:
                         CategoryData categoryData = (CategoryData) msg.obj;
-                        categoriesActivity.showSubCats(categoryData.subCategories, categoryData.id);
+                        categoriesActivity.showSubCats(categoryData.subCategories, categoryData.id, categoryData.name);
                         break;
 
                     case HandlerMassages.FILTER_BY_CAT:
@@ -68,6 +68,7 @@ public class CategoriesActivity extends AppCompatActivity {
     ProgressBar progressBar;
     ArrayList<CategoryData> list;
     int top_cat_id;
+    String cat_name;
 
     Button filterButton;
 
@@ -96,6 +97,8 @@ public class CategoriesActivity extends AppCompatActivity {
         int count = getIntent().getIntExtra("count",0);
         list = (ArrayList<CategoryData>) getIntent().getSerializableExtra("categoryDataList");
         top_cat_id = getIntent().getIntExtra("top_cat_id", -1);
+        cat_name = getIntent().getStringExtra("cat_name");
+        System.out.println("topcatid: "+ top_cat_id);
 
         progressBar.setVisibility(View.INVISIBLE);
         recyclerView.setAdapter(new CategoryListAdapter(list, actionHandler));
@@ -104,8 +107,11 @@ public class CategoriesActivity extends AppCompatActivity {
 
         filterButton.setVisibility(View.INVISIBLE);
 
+        setTitle("All Categories");
+
         if (top_cat_id > 0){
             filterButton.setVisibility(View.VISIBLE);
+            setTitle(cat_name);
             filterButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -117,14 +123,14 @@ public class CategoriesActivity extends AppCompatActivity {
 
     }
 
-    public void showSubCats(ArrayList<CategoryData> list, int top_cat_id){
+    public void showSubCats(ArrayList<CategoryData> list, int top_cat_id, String cat_name){
         Intent intent = new Intent(getBaseContext(), CategoriesActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("username", username);
         intent.putExtra("count", list.size());
         intent.putExtra("categoryDataList", list);
         intent.putExtra("top_cat_id", top_cat_id);
-//        intent.putExtra("should_fetch_cats", false);
+        intent.putExtra("cat_name", cat_name);
         startActivity(intent);
 
     }
@@ -140,4 +146,5 @@ public class CategoriesActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
+
 }

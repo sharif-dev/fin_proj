@@ -82,8 +82,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 public void onClick(View v) {
                     Message msg = new Message();
                     msg.what = HandlerMassages.SHOW_SUB_CATS;
-//                    CategoryList categoryList = new CategoryList();
-//                    categoryList.setFinalList(finalList.get(position).subCategories);
                     msg.obj =finalList.get(position);
                     actionHandler.sendMessage(msg);
                 }
@@ -98,8 +96,6 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 public void onClick(View v) {
                     Message msg = new Message();
                     msg.what = HandlerMassages.SHOW_SUB_CATS;
-//                    CategoryList categoryList = new CategoryList();
-//                    categoryList.setFinalList(finalList.get(position).subCategories);
                     msg.obj = finalList.get(position);
                     actionHandler.sendMessage(msg);
                 }
