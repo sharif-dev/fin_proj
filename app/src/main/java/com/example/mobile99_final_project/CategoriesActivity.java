@@ -97,6 +97,11 @@ public class CategoriesActivity extends AppCompatActivity {
         list = (ArrayList<CategoryData>) getIntent().getSerializableExtra("categoryDataList");
         top_cat_id = getIntent().getIntExtra("top_cat_id", -1);
 
+        progressBar.setVisibility(View.INVISIBLE);
+        recyclerView.setAdapter(new CategoryListAdapter(list, actionHandler));
+
+        System.out.println("hahahasdasdafsdf");
+
         filterButton.setVisibility(View.INVISIBLE);
 
         if (top_cat_id > 0){
@@ -109,8 +114,7 @@ public class CategoriesActivity extends AppCompatActivity {
             });
         }
 
-        progressBar.setVisibility(View.INVISIBLE);
-        recyclerView.setAdapter(new CategoryListAdapter(list, actionHandler));
+
     }
 
     public void showSubCats(ArrayList<CategoryData> list, int top_cat_id){
